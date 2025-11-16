@@ -1,12 +1,13 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
-const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8080';
-
-// Lightweight fetch of account for routing; avoid large bodies.
+// Use Next.js API route (relative URL) - middleware runs in Next.js runtime
+// This will be proxied to backend via /api/backend/account route
 async function fetchUser(req: NextRequest) {
   try {
-    const res = await fetch(`${backendUrl}/api/account`, {
+    // Build absolute URL for the Next.js API route
+    const url = new URL('/api/backend/account', req.url);
+    const res = await fetch(url, {
       headers: { cookie: req.headers.get('cookie') || '' },
       cache: 'no-store',
     });

@@ -18,13 +18,15 @@ interface Result {
 
 // Centralized server-side user fetch. Always no-store to avoid caching auth.
 export async function getCurrentUser(): Promise<Result> {
-  const backendUrl =
-    process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080";
   const cookieStore = await cookies();
   // Forward all cookies to the backend, just like middleware does
   const headers: Record<string, string> = {};
   const cookieHeader = cookieStore.toString();
   if (cookieHeader) headers.cookie = cookieHeader;
+
+  // Server-side: use BACKEND_URL directly (Docker internal network)
+  // This is more efficient than going through Next.js API route
+  const backendUrl = process.env.BACKEND_URL || "http://localhost:8080";
 
   let res: Response | null = null;
   try {
