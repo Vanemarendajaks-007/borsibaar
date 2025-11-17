@@ -52,4 +52,8 @@ public class Product {
 
     @OneToOne(mappedBy = "product", fetch = FetchType.EAGER)
     private Inventory inventory;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "category_id", insertable = false, updatable = false)
+    private Category category;
 }

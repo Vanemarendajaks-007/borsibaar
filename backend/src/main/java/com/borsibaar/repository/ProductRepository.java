@@ -13,9 +13,11 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
         SELECT DISTINCT p.*
         FROM products p
         JOIN inventory inv ON inv.product_id = p.id
+        JOIN categories cat ON p.category_id = cat.id
         WHERE
+          cat.dynamic_pricing = TRUE
           -- Org had at least one SALE in the last minute
-          EXISTS (
+          AND EXISTS (
             SELECT 1
             FROM inventory_transactions it_org
             JOIN inventory i_org ON i_org.id = it_org.inventory_id

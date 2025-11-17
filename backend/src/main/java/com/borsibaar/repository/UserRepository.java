@@ -1,5 +1,6 @@
 package com.borsibaar.repository;
 
+import com.borsibaar.entity.Role;
 import com.borsibaar.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -20,4 +21,6 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     Optional<User> findByEmailWithRole(@Param("email") String email);
 
     List<User> findByOrganizationId(Long organizationId);
+
+    List<User> findByOrganizationIdAndRole(Long organizationId, Role adminRole);
 }

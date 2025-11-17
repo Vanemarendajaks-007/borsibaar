@@ -72,8 +72,8 @@ export default function Inventory() {
   const [categories, setCategories] = useState([]);
   const [showCreateCategoryModal, setShowCreateCategoryModal] = useState(false);
   const [categoryForm, setCategoryForm] = useState({
-      name: "",
-      dynamicPricing: true,
+    name: "",
+    dynamicPricing: true,
   });
   const [productForm, setProductForm] = useState({
     name: "",
@@ -315,8 +315,8 @@ export default function Inventory() {
 
       setShowCreateCategoryModal(false);
       setCategoryForm({
-          name: "",
-          dynamicPricing: true,
+        name: "",
+        dynamicPricing: true,
       });
       await fetchCategories();
     } catch (err) {
@@ -397,11 +397,11 @@ export default function Inventory() {
     await fetchTransactionHistory(item.productId);
   };
 
-  const filteredInventory = inventory.filter((item) => {
-        // @ts-expect-error: types aren't imported currently from backend
-        item.productName.toLowerCase().includes(searchTerm.toLowerCase())
-      }
-  );
+  const filteredInventory = searchTerm?.trim().length > 0 ? inventory.filter((item) => {
+    // @ts-expect-error: types aren't imported currently from backend
+    return item.productName.toLowerCase().includes(searchTerm.toLowerCase())
+  }
+  ) : inventory;
 
   // @ts-expect-error: types aren't imported currently from backend
   const getStockStatus = (quantity) => {
@@ -441,8 +441,8 @@ export default function Inventory() {
             </div>
             <div className="flex items-center gap-4">
               <Button
-                  onClick={() => setShowCreateCategoryModal(true)}
-                  className="flex items-center gap-2 px-4 py-2 bg-blue-100 text-black rounded-lg hover:bg-blue-200 transition font-medium"
+                onClick={() => setShowCreateCategoryModal(true)}
+                className="flex items-center gap-2 px-4 py-2 bg-blue-100 text-black rounded-lg hover:bg-blue-200 transition font-medium"
               >
                 <ListPlus className="w-4 h-4" />
                 <span className="flex">New Category</span>
@@ -544,7 +544,7 @@ export default function Inventory() {
                         </td>
                         <td className="py-3 px-4 text-center">
                           <span className="text-lg text-gray-300">
-                             {isNaN(parseFloat(item.maxPrice)) ? "--" : parseFloat(item.maxPrice).toFixed(2)}€
+                            {isNaN(parseFloat(item.maxPrice)) ? "--" : parseFloat(item.maxPrice).toFixed(2)}€
                           </span>
                         </td>
                         <td className="py-3 px-4 text-center">
@@ -593,9 +593,9 @@ export default function Inventory() {
                               <History className="w-4 h-4" />
                             </Button>
                             <Button
-                                onClick={() => openDeleteModal(item)}
-                                className="p-2 text-white bg-rose-600 hover:bg-rose-700 rounded-lg transition"
-                                title="Delete Product"
+                              onClick={() => openDeleteModal(item)}
+                              className="p-2 text-white bg-rose-600 hover:bg-rose-700 rounded-lg transition"
+                              title="Delete Product"
                             >
                               <Trash className="w-4 h-4" />
                             </Button>
@@ -685,19 +685,19 @@ export default function Inventory() {
                 Min price *
               </label>
               <Input
-                  type="number"
-                  step="0.01"
-                  min="0"
-                  value={productForm.minPrice}
-                  onChange={(e) =>
-                      setProductForm({
-                        ...productForm,
-                        minPrice: e.target.value,
-                      })
-                  }
-                  className="w-full px-3 py-2 border border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="0.00"
-                  required
+                type="number"
+                step="0.01"
+                min="0"
+                value={productForm.minPrice}
+                onChange={(e) =>
+                  setProductForm({
+                    ...productForm,
+                    minPrice: e.target.value,
+                  })
+                }
+                className="w-full px-3 py-2 border border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="0.00"
+                required
               />
             </div>
             <div>
@@ -705,19 +705,19 @@ export default function Inventory() {
                 Max price *
               </label>
               <Input
-                  type="number"
-                  step="0.01"
-                  min="0"
-                  value={productForm.maxPrice}
-                  onChange={(e) =>
-                      setProductForm({
-                        ...productForm,
-                        maxPrice: e.target.value,
-                      })
-                  }
-                  className="w-full px-3 py-2 border border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="0.00"
-                  required
+                type="number"
+                step="0.01"
+                min="0"
+                value={productForm.maxPrice}
+                onChange={(e) =>
+                  setProductForm({
+                    ...productForm,
+                    maxPrice: e.target.value,
+                  })
+                }
+                className="w-full px-3 py-2 border border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="0.00"
+                required
               />
             </div>
             <div>
@@ -779,7 +779,7 @@ export default function Inventory() {
                 !productForm.name ||
                 !productForm.categoryId ||
                 !productForm.currentPrice ||
-                  !productForm.minPrice ||
+                !productForm.minPrice ||
                 !productForm.maxPrice
               }
               className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition font-medium disabled:bg-gray-700 disabled:cursor-not-allowed"
@@ -811,20 +811,20 @@ export default function Inventory() {
 
           <div className="mt-6 flex justify-end gap-3">
             <Button
-                variant="outline"
-                onClick={() => {
-                  setShowDeleteProductModal(false);
-                  setSelectedProduct(null);
-                }}
+              variant="outline"
+              onClick={() => {
+                setShowDeleteProductModal(false);
+                setSelectedProduct(null);
+              }}
             >
               Cancel
             </Button>
             <Button
-                className="bg-rose-600 hover:bg-rose-700 text-white"
-                onClick={() => {
-                  const id = selectedProduct?.productId ?? selectedProduct?.id;
-                  if (id) handleDeleteProduct(Number(id));
-                }}
+              className="bg-rose-600 hover:bg-rose-700 text-white"
+              onClick={() => {
+                const id = selectedProduct?.productId ?? selectedProduct?.id;
+                if (id) handleDeleteProduct(Number(id));
+              }}
             >
               Delete
             </Button>
@@ -841,17 +841,17 @@ export default function Inventory() {
                 Category Name *
               </label>
               <Input
-                  type="text"
-                  value={categoryForm.name}
-                  onChange={(e) =>
-                      setCategoryForm({
-                        ...categoryForm,
-                        name: e.target.value,
-                      })
-                  }
-                  className="w-full px-3 py-2 border border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Category name"
-                  required
+                type="text"
+                value={categoryForm.name}
+                onChange={(e) =>
+                  setCategoryForm({
+                    ...categoryForm,
+                    name: e.target.value,
+                  })
+                }
+                className="w-full px-3 py-2 border border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="Category name"
+                required
               />
             </div>
             <div>
@@ -859,13 +859,13 @@ export default function Inventory() {
                 Dynamic Pricing *
               </label>
               <Select
-                  value={categoryForm.dynamicPricing ? "enabled" : "disabled"}
-                  onValueChange={(value) =>
-                      setCategoryForm({
-                        ...categoryForm,
-                        dynamicPricing: value === "enabled",
-                      })
-                  }
+                value={categoryForm.dynamicPricing ? "enabled" : "disabled"}
+                onValueChange={(value) =>
+                  setCategoryForm({
+                    ...categoryForm,
+                    dynamicPricing: value === "enabled",
+                  })
+                }
               >
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select pricing type" />
@@ -877,11 +877,11 @@ export default function Inventory() {
               </Select>
             </div>
             <Button
-                onClick={handleAddCategory}
-                disabled={
-                  !categoryForm.name
-                }
-                className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition font-medium disabled:bg-gray-700 disabled:cursor-not-allowed"
+              onClick={handleAddCategory}
+              disabled={
+                !categoryForm.name
+              }
+              className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition font-medium disabled:bg-gray-700 disabled:cursor-not-allowed"
             >
               Create Category
             </Button>
@@ -1124,14 +1124,13 @@ export default function Inventory() {
                   >
                     <div className="flex justify-between items-start mb-2">
                       <span
-                        className={`inline-flex items-center px-2.5 py-0.5 rounded text-xs font-medium ${
-                          transaction.transactionType === "PURCHASE" ||
+                        className={`inline-flex items-center px-2.5 py-0.5 rounded text-xs font-medium ${transaction.transactionType === "PURCHASE" ||
                           transaction.transactionType === "INITIAL"
-                            ? "bg-green-900 text-green-100"
-                            : transaction.transactionType === "SALE"
+                          ? "bg-green-900 text-green-100"
+                          : transaction.transactionType === "SALE"
                             ? "bg-red-900 text-red-100"
                             : "bg-blue-900 text-blue-100"
-                        }`}
+                          }`}
                       >
                         {transaction.transactionType}
                       </span>
@@ -1143,11 +1142,10 @@ export default function Inventory() {
                       <div>
                         <span className="text-gray-400">Change:</span>
                         <span
-                          className={`ml-1 font-semibold ${
-                            Number(transaction.quantityChange) >= 0
-                              ? "text-green-400"
-                              : "text-red-400"
-                          }`}
+                          className={`ml-1 font-semibold ${Number(transaction.quantityChange) >= 0
+                            ? "text-green-400"
+                            : "text-red-400"
+                            }`}
                         >
                           {Number(transaction.quantityChange) >= 0 ? "+" : ""}
                           {Number(transaction.quantityChange).toFixed(2)}
@@ -1178,15 +1176,15 @@ export default function Inventory() {
                     )}
                     {(transaction.createdByName ||
                       transaction.createdByEmail) && (
-                      <div className="flex items-center gap-1 mt-2 text-xs text-gray-400">
-                        <User className="w-3 h-3" />
-                        <span>
-                          By:{" "}
-                          {transaction.createdByName ||
-                            transaction.createdByEmail}
-                        </span>
-                      </div>
-                    )}
+                        <div className="flex items-center gap-1 mt-2 text-xs text-gray-400">
+                          <User className="w-3 h-3" />
+                          <span>
+                            By:{" "}
+                            {transaction.createdByName ||
+                              transaction.createdByEmail}
+                          </span>
+                        </div>
+                      )}
                   </div>
                 ))}
               </div>

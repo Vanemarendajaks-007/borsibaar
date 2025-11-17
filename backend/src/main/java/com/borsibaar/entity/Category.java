@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "categories")
 @Getter
@@ -22,4 +25,6 @@ public class Category {
     @Column(name = "dynamic_pricing", nullable = false)
     private boolean dynamicPricing;
 
+    @OneToMany(mappedBy = "category")
+    private Set<Product> products = new HashSet<>();
 }

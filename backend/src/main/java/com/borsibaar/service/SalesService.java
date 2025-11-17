@@ -1,6 +1,7 @@
 package com.borsibaar.service;
 
 import com.borsibaar.dto.*;
+import com.borsibaar.entity.Category;
 import com.borsibaar.entity.Inventory;
 import com.borsibaar.entity.InventoryTransaction;
 import com.borsibaar.entity.Product;
@@ -99,10 +100,15 @@ public class SalesService {
                                 .orElse(product.getBasePrice());
                 BigDecimal totalPrice = priceBeforeSale.multiply(item.quantity());
 
-                BigDecimal priceAfterSale = priceBeforeSale.add(Product.DEFAULT_PRICE_INCREASE);
-                if (product.getMaxPrice() != null && priceAfterSale.compareTo(product.getMaxPrice()) > 0) {
-                        priceAfterSale = product.getMaxPrice();
+                BigDecimal priceAfterSale = priceBeforeSale;
+                Category category = product.getCategory();
+                if (category != null && category.isDynamicPricing()) {
+                        priceAfterSale = priceBeforeSale.add(Product.DEFAULT_PRICE_INCREASE);
+                        if (product.getMaxPrice() != null && priceAfterSale.compareTo(product.getMaxPrice()) > 0) {
+                                priceAfterSale = product.getMaxPrice();
+                        }
                 }
+
 
                 // Update inventory
                 inventory.setQuantity(newQuantity);
