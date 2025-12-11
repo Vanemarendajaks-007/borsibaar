@@ -12,7 +12,7 @@ jobs:
       SSH_USER: ${{ secrets.SSH_USER }}
       SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
       SERVER_IP: ${{ secrets.SERVER_IP }}
-      DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+      DEPLOY_PATH: ~/studentbar-pos-deploy
       ENV_PRODUCTION_FILE: ${{ secrets.ENV_PRODUCTION_FILE }}
       DOCKER_COMPOSE_FILE: docker-compose.prod.yaml
 
