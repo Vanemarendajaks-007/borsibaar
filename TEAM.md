@@ -34,28 +34,30 @@ Vanemarendajaks-007
 
 ## Branching
 
-- Feature branches must be created from `develop` (not `main`).
-- Branch naming should include the ticket number:
+- We use only:
+  - `main` (protected, always stable / releasable)
+  - short-lived feature branches (`feature/*`, `bugfix/*`, etc.)
 
-    - `feature/#26-short-description`
-    - `bugfix/#31-fix-null-pointer`
-    - `task/#40-update-dependencies`
+### Creating a branch
+- Always branch off `main`
+- Branch naming must include the ticket number:
+  - `feature/#26-short-description`
+  - `bugfix/#31-fix-null-pointer`
+  - `chore/#40-update-dependencies`
 
 ## Pull requests & merging
 
-### Feature work
-- Implement changes on a feature branch.
-- Merge `feature/*` → `develop` (PR optional).
+- All work is done in a feature branch.
+- Merge `feature/*` → `main` **via Pull Request**.
+- PR review is required before merging.
 
-### Release to production
-- Merge `develop` → `main` **via Pull Request** + **review**.
-
-## Branch protection
+## Main branch protection
 
 - `main` is protected:
-    - merges require a PR
-    - at least one review is required
-    - direct pushes are not allowed
+  - PR required
+  - at least one approval required
+  - no direct pushes
+  - (recommended) required status checks (CI) must pass
 
 ---
 
