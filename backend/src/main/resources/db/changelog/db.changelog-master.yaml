@@ -989,3 +989,17 @@ databaseChangeLog:
         - dropColumn:
             columnName: price_decrease_step
             tableName: organizations
+  - changeSet:
+      id: 015-insert-old-fashioned
+      author: kris
+      changes:
+        - sql:
+            sql: >
+              INSERT INTO products (organization_id, category_id, name, description, base_price, min_price, max_price)
+              SELECT 2, c.id, 'Old Fashioned', 'Tummine kange viskikokteil Angostura bitteri, apelsinikoore ja suhkrukuubikuga', 6.00, 5.50, 8.00
+              FROM categories c WHERE c.organization_id = 2 AND c.name = 'Kokteilid';
+
+        - sql:
+            sql: >
+              INSERT INTO inventory (organization_id, product_id, quantity)
+              SELECT 2, p.id, 120 FROM products p WHERE p.organization_id = 2 AND p.name = 'Old Fashioned';
