@@ -16,6 +16,8 @@ import {
 import type { components } from "@/generated/api"
 
 type InventoryTransactionResponseDto = components["schemas"]["InventoryTransactionResponseDto"];
+type InventoryResponseDto = components["schemas"]["InventoryResponseDto"];
+type CategoryResponseDto = components["schemas"]["CategoryResponseDto"];
 import {
   Select,
   SelectContent,
@@ -37,7 +39,7 @@ import { Button } from "@/components/ui/button";
 export const dynamic = "force-dynamic";
 
 export default function Inventory() {
-  const [inventory, setInventory] = useState([]);
+  const [inventory, setInventory] = useState<InventoryResponseDto[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
@@ -57,7 +59,7 @@ export default function Inventory() {
   });
   const [showCreateProductModal, setShowCreateProductModal] = useState(false);
   const [showDeleteProductModal, setShowDeleteProductModal] = useState(false);
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState<CategoryResponseDto[]>([]);
   const [showCreateCategoryModal, setShowCreateCategoryModal] = useState(false);
   const [categoryForm, setCategoryForm] = useState({
     name: "",
