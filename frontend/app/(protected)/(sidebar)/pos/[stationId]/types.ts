@@ -1,19 +1,7 @@
-export interface Product {
-  id: number;
-  organizationId: number;
-  productId: number;
-  productName: string;
-  quantity: number;
-  unitPrice: number;
-  basePrice: number;
-  updatedAt: string;
-}
+import type { components } from "@/generated/api"
 
-export interface Category {
-  id: number;
-  name: string;
-  organizationId: number;
-}
+export type Product = components["schemas"]["InventoryResponseDto"]
+export type Category = components["schemas"]["CategoryResponseDto"] & { id: number }
 
 export interface CartItem {
   productId: number;
@@ -23,19 +11,5 @@ export interface CartItem {
   unitPrice: number;
 }
 
-export interface CurrentUser {
-  id: number | string;
-  email: string;
-  name?: string;
-  organizationId?: number;
-  needsOnboarding: boolean;
-  role?: string;
-}
-
-export interface BarStation {
-  id: number;
-  organizationId: number;
-  name: string;
-  description?: string;
-  isActive: boolean;
-}
+export type CurrentUser = components["schemas"]["CurrentUser"] & { id: string | number }
+export type BarStation = components["schemas"]["BarStationResponseDto"]

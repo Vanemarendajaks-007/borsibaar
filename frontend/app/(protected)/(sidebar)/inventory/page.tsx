@@ -13,21 +13,9 @@ import {
   ListPlus,
   Trash,
 } from "lucide-react";
+import type { components } from "@/generated/api"
 
-interface InventoryTransactionResponseDto {
-  id: number;
-  inventoryId: number;
-  transactionType: string;
-  quantityChange: number;
-  quantityBefore: number;
-  quantityAfter: number;
-  referenceId?: string;
-  notes?: string;
-  createdBy: string;
-  createdByName?: string;
-  createdByEmail?: string;
-  createdAt: string;
-}
+type InventoryTransactionResponseDto = components["schemas"]["InventoryTransactionResponseDto"];
 import {
   Select,
   SelectContent,
