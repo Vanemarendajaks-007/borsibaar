@@ -98,7 +98,7 @@ export default function PriceHistoryGraphFancy({
       const historyJson: HistoryDto[] = await res.json();
       setCurrent({ productInv, priceHistory: historyJson });
     } catch (e) {
-      setError(e?.message || "Failed to fetch history");
+      setError(e instanceof Error ? e.message : "Failed to fetch history");
     }
   }, []);
 
@@ -207,17 +207,33 @@ export default function PriceHistoryGraphFancy({
 
   // ---------- D3 drawing ----------
   const wrapRef = useRef<HTMLDivElement | null>(null);
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const money = useMemo(
     () => new Intl.NumberFormat("et-EE", { style: "currency", currency: "EUR" }),
     [],
   );
 
+  // Resize observer for responsive chart
   useEffect(() => {
     if (!wrapRef.current) return;
+
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const { width, height } = entry.contentRect;
+        setDimensions({ width, height });
+      }
+    });
+
+    resizeObserver.observe(wrapRef.current);
+    return () => resizeObserver.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!wrapRef.current || dimensions.width === 0) return;
     d3.select(wrapRef.current).selectAll("*").remove();
 
-    const w = wrapRef.current.clientWidth;
-    const h = wrapRef.current.clientHeight;
+    const w = dimensions.width;
+    const h = dimensions.height;
     const isMobile = w < 480;
     const isTablet = w < 768;
     const margin = isMobile
@@ -451,16 +467,16 @@ export default function PriceHistoryGraphFancy({
     //     ? "0.0%"
     //     : `${change > 0 ? "+" : "-"}${Math.abs(changePct).toFixed(1)}%`;
 
-  }, [windowed, cutoff, now, delta, current?.productInv?.productName, money]);
+  }, [windowed, cutoff, now, delta, current?.productInv?.productName, money, dimensions]);
 
   return (
-    <div className="w-full">
+    <div className="w-full min-w-0 overflow-hidden">
       {error && (
         <div className="mb-2 rounded-md bg-red-900/40 px-3 py-2 text-sm text-rose-200">
           {error}
         </div>
       )}
-      <div ref={wrapRef} className="w-full aspect-[4/3] sm:aspect-[16/10] lg:aspect-[16/9] min-h-[250px] sm:min-h-[300px] lg:min-h-[350px]" />
+      <div ref={wrapRef} className="w-full aspect-[3/2] sm:aspect-[16/10] lg:aspect-[16/9]" />
     </div>
   );
 }

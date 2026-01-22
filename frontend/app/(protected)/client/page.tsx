@@ -117,9 +117,9 @@ export default function ClientProductsByCategory() {
           </div>
         )}
 
-        <section className="rounded-2xl bg-[#1b1830] border border-[#2a2640] p-3 sm:p-4 flex flex-col w-full lg:basis-2/3">
-          <div className="mb-3 flex items-center justify-between">
-            <h2 className="text-lg md:text-xl font-semibold tracking-wide">
+        <section className="rounded-2xl bg-[#1b1830] border border-[#2a2640] p-3 sm:p-4 flex flex-col w-full lg:basis-2/3 min-w-0">
+          <div className="mb-2 sm:mb-3 flex items-center justify-between">
+            <h2 className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold tracking-wide">
               Products by Category
             </h2>
           </div>
@@ -233,36 +233,37 @@ export default function ClientProductsByCategory() {
         </section>
 
         {/* PAREM – graafik samas boardis */}
-        <section className="rounded-2xl border border-[#2a2640] bg-[#1b1830] p-3 sm:p-4 flex flex-col gap-4">
-          <header className="flex flex-col gap-2 text-center justify-between pb-4">
-            <div className="max-h-[80px] sm:max-h-[100px] lg:max-h-[130px] w-full flex justify-center">
+        <section className="rounded-2xl border border-[#2a2640] bg-[#1b1830] p-2 sm:p-3 lg:p-4 flex flex-col gap-2 sm:gap-3 lg:gap-4 w-full lg:basis-1/3 min-w-0 overflow-hidden">
+          <header className="flex flex-col gap-2 text-center justify-between pb-2 sm:pb-4 overflow-hidden">
+            <div className="h-[50px] sm:h-[70px] lg:h-[90px] xl:h-[110px] w-full flex justify-center items-center overflow-hidden">
               <img
                 src="/tudengibaarlogo.png"
                 alt="Tudengibaar"
-                className="h-full object-contain"
-              /></div>
+                className="h-full w-auto max-w-full object-contain"
+              />
+            </div>
           </header>
-          <div className="mb-3 flex items-center justify-between">
-            <h2 className="text-base sm:text-lg md:text-xl font-semibold tracking-wide">
+          <div className="mb-2 sm:mb-3 flex items-center justify-between">
+            <h2 className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold tracking-wide">
               Price History
             </h2>
           </div>
           <Chart groups={groups} />
-          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 lg:gap-5 rounded-full bg-[#191530] px-3 sm:px-4 lg:px-6 py-2 sm:py-3 lg:py-4 mx-1 sm:mx-2 lg:mx-3 my-1 sm:my-2 border border-[#2a2640]">
+          <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 lg:gap-5 rounded-2xl sm:rounded-full bg-[#191530] px-2 sm:px-4 lg:px-6 py-2 sm:py-3 lg:py-4 mx-0 sm:mx-2 lg:mx-3 my-1 sm:my-2 border border-[#2a2640]">
             <span className="text-[8px] sm:text-[10px] md:text-[11px] uppercase tracking-[0.18em] text-[#8b88a9]">
               Sponsored by
             </span>
             {sponsors.map((s) => (
               <div
                 key={s.name}
-                className="flex items-center justify-center h-6 w-16 sm:h-8 sm:w-20 md:h-10 md:w-28 lg:w-32"
+                className="flex items-center justify-center h-5 w-12 sm:h-6 sm:w-16 md:h-8 md:w-20 lg:h-10 lg:w-28"
               >
                 <Image
                   src={s.logo}
                   alt={s.name}
                   width={120}
                   height={40}
-                  className="max-h-6 sm:max-h-8 md:max-h-10 max-w-full object-contain opacity-90 hover:opacity-100 transition-opacity"
+                  className="max-h-5 sm:max-h-6 md:max-h-8 lg:max-h-10 max-w-full object-contain opacity-90 hover:opacity-100 transition-opacity"
                 />
               </div>
             ))}
