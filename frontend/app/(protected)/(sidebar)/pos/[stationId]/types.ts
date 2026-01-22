@@ -1,7 +1,7 @@
 import type { components } from "@/generated/api"
 
 export type Product = components["schemas"]["InventoryResponseDto"]
-export type Category = components["schemas"]["CategoryResponseDto"] & { id: number }
+export type Category = components["schemas"]["CategoryResponseDto"]
 
 export interface CartItem {
   productId: number;
