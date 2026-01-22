@@ -89,7 +89,7 @@ export default function ClientProductsByCategory() {
         setErr(null);
       } catch (e) {
         if (!alive) return;
-        setErr(e?.message || "Failed to load products");
+        setErr(e instanceof Error ? e.message : "Failed to load products");
       } finally {
         setLoading(false);
       }
@@ -109,7 +109,7 @@ export default function ClientProductsByCategory() {
   );
 
   return (
-    <div className="w-full bg-[#141224] text-white px-2 py-2 sm:px-4 sm:py-4 flex items-stretch justify-center flex flex-col gap-4">
+    <div className="w-full bg-[#141224] text-white px-2 py-2 sm:px-4 sm:py-4 flex flex-col items-stretch justify-center gap-4">
       <div className="flex flex-col lg:flex-row gap-3 lg:gap-4">
         {err && (
           <div className="rounded-xl border border-red-700 bg-red-950/60 px-4 py-3 text-sm text-red-200">

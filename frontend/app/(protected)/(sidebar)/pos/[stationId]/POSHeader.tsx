@@ -33,23 +33,32 @@ export function POSHeader({
   return (
     <div className="rounded-lg bg-card p-3 sm:p-4 lg:p-6 shadow-sm mb-3 sm:mb-4 lg:mb-6 border-1 border-[color-mix(in oklab, var(--ring) 50%, transparent)]">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
-        <div className="flex items-center gap-3">
+        <div className="flex items-start gap-3 sm:gap-4">
           <Button
             variant="outline"
             size="sm"
             onClick={() => router.push("/pos")}
-            className="mr-1 sm:mr-2"
+            className="flex-shrink-0 mt-1 sm:mt-1.5"
           >
             <ArrowLeft className="w-3 h-3 sm:w-4 sm:h-4" />
           </Button>
-          <ShoppingCart className="w-5 h-5 sm:w-6 sm:h-6 lg:w-8 lg:h-8 text-blue-600" />
-          <div>
-            <h1 className="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-bold text-gray-100">
-              {station?.name || "Loading..."}
+          <div className="relative flex-shrink-0">
+            <div className="w-9 h-9 sm:w-11 sm:h-11 lg:w-12 lg:h-12 rounded-xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center shadow-lg shadow-blue-500/20">
+              <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-white" />
+            </div>
+            <div className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 sm:w-3 sm:h-3 bg-green-500 rounded-full border-2 border-card" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <h1 className="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-bold break-words leading-tight">
+              <span className="text-blue-400">POS</span>{" "}
+              <span className="text-gray-100">
+                {station?.name || "Loading..."}
+              </span>
             </h1>
-            {station?.description && (
-              <p className="text-xs sm:text-sm text-gray-400">{station.description}</p>
-            )}
+            <p className="text-xs sm:text-sm text-gray-400 flex items-center gap-1.5 mt-0.5 sm:mt-1 break-words">
+              <span className="hidden sm:inline-block w-1 h-1 rounded-full bg-blue-400 flex-shrink-0" />
+              {station?.description || "Ready to serve"}
+            </p>
           </div>
         </div>
         <div className="flex items-center gap-2 sm:gap-4 lg:gap-6">
@@ -66,7 +75,9 @@ export function POSHeader({
               )}
             </div>
           )}
-          <div className="hidden sm:block text-xs sm:text-sm text-gray-400">Products: {productCount}</div>
+          <div className="hidden sm:block text-xs sm:text-sm text-gray-400">
+            Products: {productCount}
+          </div>
         </div>
       </div>
 
