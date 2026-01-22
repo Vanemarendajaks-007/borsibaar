@@ -252,7 +252,7 @@ export default function POSStation() {
   }
 
   return (
-    <div className="min-h-screen bg-background p-6 pb-24 lg:pb-6 w-full">
+    <div className="min-h-screen bg-background p-2 sm:p-4 lg:p-6 pb-20 sm:pb-24 lg:pb-6 w-full">
       <div className="max-w-full mx-auto">
         <POSHeader
           station={station}
@@ -266,11 +266,11 @@ export default function POSStation() {
         />
 
         {/* Main Content */}
-        <div className="flex flex-col lg:flex-row gap-6">
+        <div className="flex flex-col lg:flex-row gap-3 sm:gap-4 lg:gap-6">
           {/* Products Grid */}
           <div className="flex-1 order-2 lg:order-1">
             <div
-              className={clsx("grid grid-cols-1 sm:grid-cols-2 gap-4", {
+              className={clsx("grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 lg:gap-4", {
                 "transition-all duration-300": true,
                 "pointer-events-none blur-xs": loading,
                 "blur-none": !loading,

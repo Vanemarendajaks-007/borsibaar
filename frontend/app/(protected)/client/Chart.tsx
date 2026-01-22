@@ -79,7 +79,7 @@ export default function PriceHistoryGraphFancy({
   const flatten = useCallback((g: Record<string, InvDto[]>) => {
     const catNames = Object.keys(g).sort((a, b) => a.localeCompare(b));
     return catNames.flatMap((name) =>
-      [...(g[name] ?? [])].sort((a, b) => a.productId - b.productId),
+      [...(g[name] ?? [])].sort((a, b) => a.productId - b.productId)
     );
   }, []);
 
@@ -92,24 +92,27 @@ export default function PriceHistoryGraphFancy({
         {
           cache: "no-store",
           credentials: "include",
-        },
+        }
       );
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const historyJson: HistoryDto[] = await res.json();
       setCurrent({ productInv, priceHistory: historyJson });
     } catch (e) {
-      setError(e?.message || "Failed to fetch history");
+      setError(e instanceof Error ? e.message : "Failed to fetch history");
     }
   }, []);
 
   const rotateOnce = useCallback(() => {
-    const flat = flatten(groupsRef.current).filter(p => p.unitPrice != p.basePrice);
+    const flat = flatten(groupsRef.current).filter(
+      (p) => p.unitPrice != p.basePrice
+    );
     if (flat.length === 0) return;
     const cur = activeProductRef.current;
     let nextIdx: number;
     if (cur) {
       const i = flat.findIndex((p) => p.productId === cur.productId);
-      nextIdx = i >= 0 ? (i + 1) % flat.length : activeIdxRef.current % flat.length;
+      nextIdx =
+        i >= 0 ? (i + 1) % flat.length : activeIdxRef.current % flat.length;
     } else {
       nextIdx = activeIdxRef.current % flat.length;
     }
@@ -148,21 +151,20 @@ export default function PriceHistoryGraphFancy({
       .sort((a, b) => a.ts.getTime() - b.ts.getTime());
 
     const firstBefore = hist.find(
-      (h) => Number.isFinite(h.before) && h.before !== 0,
+      (h) => Number.isFinite(h.before) && h.before !== 0
     )?.before;
-    const base =
-      (firstBefore ??
-        product?.basePrice ??
-        product.unitPrice ??
-        hist[0]?.after ??
-        0) as number;
+    const base = (firstBefore ??
+      product?.basePrice ??
+      product.unitPrice ??
+      hist[0]?.after ??
+      0) as number;
 
     const out: { date: Date; price: number }[] = [];
     if (hist.length === 0) {
       const now = new Date();
       out.push(
         { date: new Date(now.getTime() - 1), price: base },
-        { date: now, price: base },
+        { date: now, price: base }
       );
       return out;
     }
@@ -181,7 +183,12 @@ export default function PriceHistoryGraphFancy({
 
   // ---- WINDOW: last 1 hour + delta ----
   const HOURS_WINDOW = 1;
-  const { data: windowed, cutoff, now, delta } = useMemo(() => {
+  const {
+    data: windowed,
+    cutoff,
+    now,
+    delta,
+  } = useMemo(() => {
     const _now = new Date();
     const _cutoff = new Date(_now.getTime() - HOURS_WINDOW * 3600_000);
     if (!series.length)
@@ -207,18 +214,51 @@ export default function PriceHistoryGraphFancy({
 
   // ---------- D3 drawing ----------
   const wrapRef = useRef<HTMLDivElement | null>(null);
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const money = useMemo(
-    () => new Intl.NumberFormat("et-EE", { style: "currency", currency: "EUR" }),
-    [],
+    () =>
+      new Intl.NumberFormat("et-EE", { style: "currency", currency: "EUR" }),
+    []
   );
 
+  // Resize observer for responsive chart
   useEffect(() => {
     if (!wrapRef.current) return;
+
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const { width, height } = entry.contentRect;
+        setDimensions({ width, height });
+      }
+    });
+
+    resizeObserver.observe(wrapRef.current);
+    return () => resizeObserver.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!wrapRef.current || dimensions.width === 0) return;
     d3.select(wrapRef.current).selectAll("*").remove();
 
-    const w = wrapRef.current.clientWidth;
-    const h = window.innerHeight * 0.60; //Math.max(320, Math.round(w * 0.48));
-    const margin = { top: 56, right: 32, bottom: 56, left: 80 };
+    const w = dimensions.width;
+    const h = dimensions.height;
+    const isMobile = w < 480;
+    const isTablet = w < 768;
+    const isVerySmall = w < 300;
+    // Left margin: space for Y-axis label + gap + tick values
+    // labelWidth + gap + tickValuesWidth
+    const yLabelWidth = isVerySmall ? 0 : isMobile ? 16 : 20;
+    const yLabelGap = isVerySmall ? 0 : 8;
+    const yTickWidth = isVerySmall ? 36 : isMobile ? 42 : isTablet ? 50 : 58;
+    const leftMargin = yLabelWidth + yLabelGap + yTickWidth;
+
+    const margin = isVerySmall
+      ? { top: 28, right: 24, bottom: 28, left: leftMargin }
+      : isMobile
+      ? { top: 32, right: 28, bottom: 32, left: leftMargin }
+      : isTablet
+      ? { top: 44, right: 32, bottom: 44, left: leftMargin }
+      : { top: 56, right: 40, bottom: 56, left: leftMargin };
 
     const svg = d3
       .select(wrapRef.current)
@@ -259,16 +299,25 @@ export default function PriceHistoryGraphFancy({
       .attr("ry", r)
       .attr("fill", "url(#chartBg)");
 
-    // title
+    // title - truncate product name if needed
+    const productName = current?.productInv.productName ?? "—";
+    const maxNameLength = isVerySmall ? 10 : isMobile ? 15 : isTablet ? 25 : 40;
+    const truncatedName =
+      productName.length > maxNameLength
+        ? productName.slice(0, maxNameLength - 1) + "…"
+        : productName;
     svg
       .append("text")
       .attr("x", w / 2)
-      .attr("y", 30)
+      .attr("y", isVerySmall ? 18 : isMobile ? 22 : 30)
       .attr("text-anchor", "middle")
       .attr("fill", "#f9fafb")
       .style("font-weight", 700)
-      .style("font-size", "16px")
-      .text(`${current?.productInv.productName ?? "—"} • Last 1h`);
+      .style(
+        "font-size",
+        isVerySmall ? "10px" : isMobile ? "11px" : isTablet ? "14px" : "16px"
+      )
+      .text(`${truncatedName} • 1h`);
 
     const g = svg
       .append("g")
@@ -330,19 +379,19 @@ export default function PriceHistoryGraphFancy({
         s
           .select(".domain")
           .attr("stroke", "rgba(148, 163, 184, 0.4)")
-          .attr("stroke-width", 0.8),
+          .attr("stroke-width", 0.8)
       )
       .call((s) =>
         s
           .selectAll("text")
           .attr("fill", "#cdd6f4")
-          .style("font-size", "11px"),
+          .style("font-size", isVerySmall ? "8px" : isMobile ? "9px" : "11px")
       )
       .call((s) =>
         s
           .selectAll("line")
           .attr("stroke", "rgba(148,163,184,0.4)")
-          .attr("stroke-width", 0.5),
+          .attr("stroke-width", 0.5)
       );
 
     // Y axis + label
@@ -350,39 +399,46 @@ export default function PriceHistoryGraphFancy({
       .call(
         d3
           .axisLeft<number>(y)
-          .ticks(6)
-          .tickFormat((v) => money.format(Number(v))),
+          .ticks(isVerySmall ? 4 : 6)
+          .tickFormat((v) => money.format(Number(v)))
       )
       .call((s) =>
         s
           .select(".domain")
           .attr("stroke", "rgba(148,163,184,0.4)")
-          .attr("stroke-width", 0.8),
+          .attr("stroke-width", 0.8)
       )
       .call((s) =>
         s
           .selectAll("text")
           .attr("fill", "#cdd6f4")
-          .style("font-size", "11px"),
+          .style("font-size", isVerySmall ? "8px" : isMobile ? "9px" : "11px")
       )
       .call((s) =>
         s
           .selectAll("line")
           .attr("stroke", "rgba(51,65,85,0.8)")
           .attr("stroke-dasharray", "3,3")
-          .attr("stroke-width", 0.6),
+          .attr("stroke-width", 0.6)
       );
 
-    g.append("text")
-      .attr("transform", "rotate(-90)")
-      .attr("x", -innerH / 2)
-      .attr("y", -60)
-      .attr("text-anchor", "middle")
-      .style("font-size", "11px")
-      .style("letter-spacing", "0.08em")
-      .style("font-weight", 600)
-      .attr("fill", "#d6d9e6")
-      .text("PRICE (EUR)");
+    // Y-axis label - positioned at fixed distance from left edge, never overlaps tick values
+    if (!isVerySmall) {
+      const labelX = yLabelWidth / 2 + 7;
+      const labelY = margin.top + innerH / 2;
+      svg
+        .append("text")
+        .attr("transform", `rotate(-90, ${labelX}, ${labelY})`)
+        .attr("x", labelX)
+        .attr("y", labelY)
+        .attr("text-anchor", "middle")
+        .attr("dominant-baseline", "middle")
+        .style("font-size", isMobile ? "9px" : "11px")
+        .style("letter-spacing", "0.08em")
+        .style("font-weight", 600)
+        .attr("fill", "#d6d9e6")
+        .text("PRICE (EUR)");
+    }
 
     // Glow + area gradient
     const glow = defs.append("filter").attr("id", "glowBlue");
@@ -422,7 +478,10 @@ export default function PriceHistoryGraphFancy({
       .y1((d) => y(d.price))
       .curve(d3.curveStepAfter);
 
-    g.append("path").datum(windowed).attr("d", area).attr("fill", "url(#areaBlue)");
+    g.append("path")
+      .datum(windowed)
+      .attr("d", area)
+      .attr("fill", "url(#areaBlue)");
 
     g.append("path")
       .datum(windowed)
@@ -444,17 +503,27 @@ export default function PriceHistoryGraphFancy({
     //   change === 0
     //     ? "0.0%"
     //     : `${change > 0 ? "+" : "-"}${Math.abs(changePct).toFixed(1)}%`;
-
-  }, [windowed, cutoff, now, delta, current?.productInv?.productName, money]);
+  }, [
+    windowed,
+    cutoff,
+    now,
+    delta,
+    current?.productInv?.productName,
+    money,
+    dimensions,
+  ]);
 
   return (
-    <div className="h-full w-full">
+    <div className="w-full min-w-0 overflow-hidden">
       {error && (
         <div className="mb-2 rounded-md bg-red-900/40 px-3 py-2 text-sm text-rose-200">
           {error}
         </div>
       )}
-      <div ref={wrapRef} className="h-full w-full" />
+      <div
+        ref={wrapRef}
+        className="w-full aspect-[3/2] sm:aspect-[16/10] lg:aspect-[16/9]"
+      />
     </div>
   );
 }

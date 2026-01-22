@@ -77,7 +77,7 @@ export function CartSidebar({
       {/* Full cart sidebar */}
       <div
         id="cart-sidebar"
-        className="w-full lg:w-80 bg-card rounded-lg shadow-sm p-6 lg:sticky lg:top-6 lg:self-start border-1 border-[color-mix(in oklab, var(--ring) 50%, transparent)]"
+        className="w-full lg:w-80 bg-card rounded-lg shadow-sm p-3 sm:p-4 lg:p-6 lg:sticky lg:top-6 lg:self-start border-1 border-[color-mix(in oklab, var(--ring) 50%, transparent)]"
       >
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-bold text-gray-100">Cart</h2>
@@ -92,7 +92,7 @@ export function CartSidebar({
           </div>
         ) : (
           <>
-            <div className="space-y-2 sm:space-y-3 mb-6 max-h-96 overflow-y-auto scrollbar-hide">
+            <div className="space-y-1.5 sm:space-y-2 lg:space-y-3 mb-6 max-h-48 sm:max-h-64 lg:max-h-96 overflow-y-auto scrollbar-hide">
               {cart.map((item) => (
                 <div
                   key={item.productId}
@@ -111,12 +111,12 @@ export function CartSidebar({
                           e.stopPropagation();
                           onUpdateQuantity(item.productId, -1);
                         }}
-                        className="h-7 w-7 sm:h-8 sm:w-8 p-0"
+                        className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8 p-0"
                         aria-label={`Decrease quantity of ${item.productName}`}
                       >
-                        <Minus className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                        <Minus className="w-3 h-3 sm:w-3.5 sm:h-3.5 lg:w-4 lg:h-4" />
                       </Button>
-                      <span className="text-xs sm:text-sm font-medium w-7 sm:w-8 text-center text-gray-100">
+                      <span className="text-xs sm:text-sm font-medium w-6 sm:w-7 lg:w-8 text-center text-gray-100">
                         {item.quantity}
                       </span>
                       <Button
@@ -126,11 +126,11 @@ export function CartSidebar({
                           e.stopPropagation();
                           onUpdateQuantity(item.productId, 1);
                         }}
-                        className="h-7 w-7 sm:h-8 sm:w-8 p-0"
+                        className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8 p-0"
                         disabled={item.quantity >= item.maxQuantity}
                         aria-label={`Increase quantity of ${item.productName}`}
                       >
-                        <Plus className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                        <Plus className="w-3 h-3 sm:w-3.5 sm:h-3.5 lg:w-4 lg:h-4" />
                       </Button>
                     </div>
                     <Button
@@ -222,14 +222,14 @@ export function CartSidebar({
               <Button
                 onClick={onProcessSale}
                 disabled={isProcessingSale}
-                className="flex-1 aspect-square min-h-20 bg-green-600 hover:bg-green-700 text-white text-lg font-semibold"
+                className="flex-1 aspect-square min-h-14 sm:min-h-16 lg:min-h-20 bg-green-600 hover:bg-green-700 text-white text-sm sm:text-base lg:text-lg font-semibold"
               >
                 {isProcessingSale ? "Processing..." : "Sell"}
               </Button>
               <Button
                 onClick={onClearCart}
                 variant="outline"
-                className="flex-1 aspect-square min-h-20 text-lg font-semibold"
+                className="flex-1 aspect-square min-h-14 sm:min-h-16 lg:min-h-20 text-sm sm:text-base lg:text-lg font-semibold"
               >
                 Cancel
               </Button>
