@@ -991,7 +991,7 @@ databaseChangeLog:
             tableName: organizations
   - changeSet:
       id: 015-insert-old-fashioned
-      author: kris
+      author: andres
       changes:
         - sql:
             sql: >
