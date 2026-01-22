@@ -27,20 +27,20 @@ export function ProductCard({
 
   return (
     <div
-      className="bg-card p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer border-1 border-[color-mix(in oklab, var(--ring) 50%, transparent)]"
+      className="bg-card p-2 sm:p-3 lg:p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer border-1 border-[color-mix(in oklab, var(--ring) 50%, transparent)]"
       onClick={() => onAddToCart(product)}
     >
       <div className="flex items-start justify-between mb-2">
-        <h3 className="font-semibold text-gray-100 truncate flex-1">
+        <h3 className="font-semibold text-gray-100 truncate flex-1 text-sm sm:text-base">
           {product.productName}
         </h3>
-        <Package className="w-4 h-4 text-gray-400 flex-shrink-0 ml-2" />
+        <Package className="w-3 h-3 sm:w-4 sm:h-4 text-gray-400 flex-shrink-0 ml-2" />
       </div>
 
       <div className="flex items-center justify-between mb-3">
         <div className="flex flex-col">
           <span
-            className={clsx("text-lg font-bold ", {
+            className={clsx("text-base sm:text-lg lg:text-xl font-bold ", {
               "text-red-400": product.unitPrice > product.basePrice,
               "text-white": product.unitPrice == product.basePrice,
               "text-green-400": product.unitPrice < product.basePrice,
@@ -48,18 +48,18 @@ export function ProductCard({
           >
             ${product.unitPrice.toFixed(2)}
           </span>
-          <span className="text-xs text-white opacity-50">
+          <span className="text-[10px] sm:text-xs text-white opacity-50">
             ${product.basePrice?.toFixed(2)}
           </span>
         </div>
         <span
-          className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${status.color}`}
+          className={`inline-flex items-center px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-full text-[10px] sm:text-xs font-medium ${status.color}`}
         >
           {status.label}
         </span>
       </div>
 
-      <div className="flex items-center justify-between text-sm text-gray-400">
+      <div className="flex items-center justify-between text-xs sm:text-sm text-gray-400">
         <span>Stock: {product.quantity}</span>
         {cartItem && (
           <span className="text-blue-400">In cart: {cartItem.quantity}</span>

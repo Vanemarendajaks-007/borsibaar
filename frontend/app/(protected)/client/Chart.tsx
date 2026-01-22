@@ -217,8 +217,14 @@ export default function PriceHistoryGraphFancy({
     d3.select(wrapRef.current).selectAll("*").remove();
 
     const w = wrapRef.current.clientWidth;
-    const h = window.innerHeight * 0.60; //Math.max(320, Math.round(w * 0.48));
-    const margin = { top: 56, right: 32, bottom: 56, left: 80 };
+    const h = wrapRef.current.clientHeight;
+    const isMobile = w < 480;
+    const isTablet = w < 768;
+    const margin = isMobile
+      ? { top: 36, right: 12, bottom: 36, left: 45 }
+      : isTablet
+      ? { top: 44, right: 20, bottom: 44, left: 60 }
+      : { top: 56, right: 32, bottom: 56, left: 80 };
 
     const svg = d3
       .select(wrapRef.current)
@@ -267,7 +273,7 @@ export default function PriceHistoryGraphFancy({
       .attr("text-anchor", "middle")
       .attr("fill", "#f9fafb")
       .style("font-weight", 700)
-      .style("font-size", "16px")
+      .style("font-size", isMobile ? "12px" : isTablet ? "14px" : "16px")
       .text(`${current?.productInv.productName ?? "—"} • Last 1h`);
 
     const g = svg
@@ -336,7 +342,7 @@ export default function PriceHistoryGraphFancy({
         s
           .selectAll("text")
           .attr("fill", "#cdd6f4")
-          .style("font-size", "11px"),
+          .style("font-size", isMobile ? "9px" : "11px"),
       )
       .call((s) =>
         s
@@ -363,7 +369,7 @@ export default function PriceHistoryGraphFancy({
         s
           .selectAll("text")
           .attr("fill", "#cdd6f4")
-          .style("font-size", "11px"),
+          .style("font-size", isMobile ? "9px" : "11px"),
       )
       .call((s) =>
         s
@@ -376,7 +382,7 @@ export default function PriceHistoryGraphFancy({
     g.append("text")
       .attr("transform", "rotate(-90)")
       .attr("x", -innerH / 2)
-      .attr("y", -60)
+      .attr("y", isMobile ? -32 : isTablet ? -45 : -60)
       .attr("text-anchor", "middle")
       .style("font-size", "11px")
       .style("letter-spacing", "0.08em")
@@ -448,13 +454,13 @@ export default function PriceHistoryGraphFancy({
   }, [windowed, cutoff, now, delta, current?.productInv?.productName, money]);
 
   return (
-    <div className="h-full w-full">
+    <div className="w-full">
       {error && (
         <div className="mb-2 rounded-md bg-red-900/40 px-3 py-2 text-sm text-rose-200">
           {error}
         </div>
       )}
-      <div ref={wrapRef} className="h-full w-full" />
+      <div ref={wrapRef} className="w-full aspect-[4/3] sm:aspect-[16/10] lg:aspect-[16/9] min-h-[250px] sm:min-h-[300px] lg:min-h-[350px]" />
     </div>
   );
 }

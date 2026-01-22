@@ -109,15 +109,15 @@ export default function ClientProductsByCategory() {
   );
 
   return (
-    <div className="w-full bg-[#141224] text-white px-4 py-4 flex items-stretch justify-center flex flex-col gap-4">
-      <div className="flex flex-row gap-4">
+    <div className="w-full bg-[#141224] text-white px-2 py-2 sm:px-4 sm:py-4 flex items-stretch justify-center flex flex-col gap-4">
+      <div className="flex flex-col lg:flex-row gap-3 lg:gap-4">
         {err && (
           <div className="rounded-xl border border-red-700 bg-red-950/60 px-4 py-3 text-sm text-red-200">
             {err}
           </div>
         )}
 
-        <section className="rounded-2xl bg-[#1b1830] border border-[#2a2640] p-4 flex flex-col basis-2/3">
+        <section className="rounded-2xl bg-[#1b1830] border border-[#2a2640] p-3 sm:p-4 flex flex-col w-full lg:basis-2/3">
           <div className="mb-3 flex items-center justify-between">
             <h2 className="text-lg md:text-xl font-semibold tracking-wide">
               Products by Category
@@ -138,12 +138,12 @@ export default function ClientProductsByCategory() {
                 return (
                   <div
                     key={c.id}
-                    className="rounded-2xl bg-[#201c31] border border-[#2a2640] p-3 w-full [&:not(:first-child)]:mt-4"
+                    className="rounded-2xl bg-[#201c31] border border-[#2a2640] p-2 sm:p-3 w-full [&:not(:first-child)]:mt-4"
                   >
                     <div className="mb-2 flex items-center justify-between break-inside-avoid">
                       <div className="flex items-center gap-2">
                         <span className="h-6 w-1.5 rounded-full bg-gradient-to-b from-purple-400 to-fuchsia-400" />
-                        <h3 className="text-xs lg:text-sm font-semibold tracking-[0.18em] text-[#e9e6ff] uppercase">
+                        <h3 className="text-[10px] sm:text-xs lg:text-sm font-semibold tracking-[0.18em] text-[#e9e6ff] uppercase">
                           {c.name}
                         </h3>
                       </div>
@@ -152,9 +152,10 @@ export default function ClientProductsByCategory() {
                       </span>
                     </div>
 
+                    <div className="overflow-x-auto -mx-2 px-2">
                     <table className="w-full text-xs lg:text-sm border-separate border-spacing-y-1 break-before-avoid">
                       <thead className="break-after-avoid">
-                        <tr className="text-[9px] lg:text-[10px] xl:text-[12px] uppercase tracking-[0.16em] text-[#7a7690]">
+                        <tr className="text-[8px] sm:text-[9px] lg:text-[10px] xl:text-[12px] uppercase tracking-[0.16em] text-[#7a7690]">
                           <th className="px-2 py-1 text-left">Product</th>
                           <th className="px-2 py-1 text-right">Price</th>
                           <th className="px-2 py-1 text-right">Δ%</th>
@@ -183,7 +184,7 @@ export default function ClientProductsByCategory() {
                                 className="bg-[#251f3a] hover:bg-[#2b2446] transition-colors break-inside-avoid"
                               >
                                 <td className="px-2 py-1">
-                                  <span className="font-medium truncate block text-[16px]">
+                                  <span className="font-medium truncate block text-sm sm:text-base">
                                     {p.productName}
                                   </span>
                                   <p>{p.description}</p>
@@ -218,6 +219,7 @@ export default function ClientProductsByCategory() {
                           })}
                       </tbody>
                     </table>
+                    </div>
                   </div>
                 );
               })}
@@ -231,9 +233,9 @@ export default function ClientProductsByCategory() {
         </section>
 
         {/* PAREM – graafik samas boardis */}
-        <section className="rounded-2xl border border-[#2a2640] bg-[#1b1830] p-4 flex flex-col gap-4">
+        <section className="rounded-2xl border border-[#2a2640] bg-[#1b1830] p-3 sm:p-4 flex flex-col gap-4">
           <header className="flex flex-col gap-2 text-center justify-between pb-4">
-            <div className="max-h-[130px] w-full flex justify-center">
+            <div className="max-h-[80px] sm:max-h-[100px] lg:max-h-[130px] w-full flex justify-center">
               <img
                 src="/tudengibaarlogo.png"
                 alt="Tudengibaar"
@@ -241,26 +243,26 @@ export default function ClientProductsByCategory() {
               /></div>
           </header>
           <div className="mb-3 flex items-center justify-between">
-            <h2 className="text-lg md:text-xl font-semibold tracking-wide">
+            <h2 className="text-base sm:text-lg md:text-xl font-semibold tracking-wide">
               Price History
             </h2>
           </div>
           <Chart groups={groups} />
-          <div className="inline-flex items-center gap-5 rounded-full bg-[#191530] px-6 py-4 mx-3 my-2 border border-[#2a2640]">
-            <span className="text-[10px] md:text-[11px] uppercase tracking-[0.18em] text-[#8b88a9]">
+          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 lg:gap-5 rounded-full bg-[#191530] px-3 sm:px-4 lg:px-6 py-2 sm:py-3 lg:py-4 mx-1 sm:mx-2 lg:mx-3 my-1 sm:my-2 border border-[#2a2640]">
+            <span className="text-[8px] sm:text-[10px] md:text-[11px] uppercase tracking-[0.18em] text-[#8b88a9]">
               Sponsored by
             </span>
             {sponsors.map((s) => (
               <div
                 key={s.name}
-                className="flex items-center justify-center h-10 w-30 md:w-32"
+                className="flex items-center justify-center h-6 w-16 sm:h-8 sm:w-20 md:h-10 md:w-28 lg:w-32"
               >
                 <Image
                   src={s.logo}
                   alt={s.name}
                   width={120}
                   height={40}
-                  className="max-h-10 max-w-full object-contain opacity-90 hover:opacity-100 transition-opacity"
+                  className="max-h-6 sm:max-h-8 md:max-h-10 max-w-full object-contain opacity-90 hover:opacity-100 transition-opacity"
                 />
               </div>
             ))}
