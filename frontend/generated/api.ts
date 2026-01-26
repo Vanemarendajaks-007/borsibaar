@@ -1253,5 +1253,3 @@ export interface operations {
         };
     };
 }
-
-components.schemas
