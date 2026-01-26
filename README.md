@@ -6,7 +6,7 @@ Börsibaar is a full-stack web application with a Spring Boot backend and Next.j
 
 ## Architecture
 
-* **Backend**: Spring Boot 3.5.9 with Java 21, PostgreSQL DB, Spring Security with OAuth2, JWT authentication
+* **Backend**: Spring Boot 3.5.9 with Java-21, PostgreSQL DB, Spring Security with OAuth2, JWT authentication
 * **Frontend**: Next.js with TypeScript, Tailwind CSS, Shadcn UI components
 * **Database**: PostgreSQL with Liquibase migrations
 * **Containerization**: Docker for development environment
