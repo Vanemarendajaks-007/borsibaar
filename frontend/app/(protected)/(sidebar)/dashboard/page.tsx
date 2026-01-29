@@ -108,7 +108,8 @@ export default function Dashboard() {
           );
           if (stationStatsRes.ok) {
             const stationStatsJson = await stationStatsRes.json();
-            if (Array.isArray(stationStatsJson)) setStationStats(stationStatsJson);
+            if (Array.isArray(stationStatsJson))
+              setStationStats(stationStatsJson);
           }
         } catch {
           // ignore stats errors silently
@@ -171,9 +172,7 @@ export default function Dashboard() {
       setSaveSuccess("Organization updated successfully");
     } catch (err) {
       setSaveError(
-        err instanceof Error
-          ? err.message
-          : "Failed to update organization"
+        err instanceof Error ? err.message : "Failed to update organization"
       );
     } finally {
       setSaving(false);
@@ -197,137 +196,195 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-background p-4">
-        <div className="rounded-lg bg-card p-6 shadow border-1 border-[color-mix(in oklab, var(--ring) 50%, transparent)]">
-          {error && (
-            <div className="mb-4 rounded border border-destructive/50 bg-destructive/10 px-4 py-2 text-sm text-destructive">
-              {error}
-            </div>
-          )}
-          <h1 className="text-3xl font-bold text-card-foreground mb-4">
-            Welcome, {me.name || me.email}!
-          </h1>
-          <div className="space-y-2 text-muted-foreground mb-6">
-            <p>
-              <span className="font-medium text-card-foreground">Email:</span>{" "}
-              {me.email}
-            </p>
-            <p>
-              <span className="font-medium text-card-foreground">
-                Organization:
-              </span>{" "}
-              {orgName}
-            </p>
-            <p>
-              <span className="font-medium text-card-foreground">Role:</span>{" "}
-              {me.role || "No role assigned"}
-            </p>
+      <div className="rounded-lg bg-card p-6 shadow border-1 border-[color-mix(in oklab, var(--ring) 50%, transparent)]">
+        {error && (
+          <div className="mb-4 rounded border border-destructive/50 bg-destructive/10 px-4 py-2 text-sm text-destructive">
+            {error}
           </div>
+        )}
+        <h1 className="text-3xl font-bold text-card-foreground mb-4">
+          Welcome, {me.name || me.email}!
+        </h1>
+        <div className="space-y-2 text-muted-foreground mb-6">
+          <p>
+            <span className="font-medium text-card-foreground">Email:</span>{" "}
+            {me.email}
+          </p>
+          <p>
+            <span className="font-medium text-card-foreground">
+              Organization:
+            </span>{" "}
+            {orgName}
+          </p>
+          <p>
+            <span className="font-medium text-card-foreground">Role:</span>{" "}
+            {me.role || "No role assigned"}
+          </p>
+        </div>
 
-          {stationStats.length > 0 && (
-            <div className="rounded-lg bg-card p-6 shadow mb-6">
-              <h2 className="text-xl font-semibold text-card-foreground mb-4">
-                Station Leaderboard
-              </h2>
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="border-b border-border">
-                      <th className="text-left py-2 text-muted-foreground font-medium">
-                        Station
-                      </th>
-                      <th className="text-left py-2 text-muted-foreground font-medium">
-                        Sales Count
-                      </th>
-                      <th className="text-left py-2 text-muted-foreground font-medium">
-                        Total Revenue
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {stationStats.map((stat) => (
-                      <tr
-                        key={stat.barStationId}
-                        className="border-b border-border last:border-0"
-                      >
-                        <td className="py-3">
-                          <div className="font-medium text-card-foreground">
-                            {stat.barStationName || `Station ${stat.barStationId}`}
-                          </div>
-                        </td>
-                        <td className="py-3 text-card-foreground font-medium">
-                          {stat.salesCount}
-                        </td>
-                        <td className="py-3 text-card-foreground font-medium">
-                          €{stat.totalRevenue.toFixed(2)}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+        {stationStats.length > 0 && (
+          <div className="rounded-lg bg-card p-6 px-0 shadow">
+            <h2 className="text-xl font-semibold text-card-foreground mb-4">
+              Station Leaderboard
+            </h2>
+            {/* Mobile card view */}
+            <div className="block sm:hidden space-y-2">
+              {stationStats.map((stat) => (
+                <div
+                  key={stat.barStationId}
+                  className="flex items-center justify-between p-3 bg-gray-800 rounded-lg"
+                >
+                  <span className="font-medium text-card-foreground">
+                    {stat.barStationName || `Station ${stat.barStationId}`}
+                  </span>
+                  <div className="text-right">
+                    <div className="font-medium text-card-foreground">
+                      €{stat.totalRevenue.toFixed(2)}
+                    </div>
+                    <div className="text-xs text-muted-foreground">
+                      {stat.salesCount} sales
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
-          )}
-
-          {salesStats.length > 0 && (
-            <div className="rounded-lg bg-card p-6 shadow">
-              <h2 className="text-xl font-semibold text-card-foreground mb-4">
-                Sales Performance by User
-              </h2>
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="border-b border-border">
-                      <th className="text-left py-2 text-muted-foreground font-medium">
-                        User
-                      </th>
-                      <th className="text-left py-2 text-muted-foreground font-medium">
-                        Station
-                      </th>
-                      <th className="text-left py-2 text-muted-foreground font-medium">
-                        Sales Count
-                      </th>
-                      <th className="text-left py-2 text-muted-foreground font-medium">
-                        Total Revenue
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {salesStats.map((stat, index) => (
-                      <tr
-                        key={`${stat.userId}-${
-                          stat.barStationId || "null"
-                        }-${index}`}
-                        className="border-b border-border last:border-0"
-                      >
-                        <td className="py-3">
-                          <div>
-                            <div className="font-medium text-card-foreground">
-                              {stat.userName || "Unknown User"}
-                            </div>
-                            <div className="text-xs text-muted-foreground">
-                              {stat.userEmail}
-                            </div>
-                          </div>
-                        </td>
-                        <td className="py-3 text-card-foreground">
+            {/* Desktop table view */}
+            <div className="hidden sm:block overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-border">
+                    <th className="text-left py-2 text-muted-foreground font-medium">
+                      Station
+                    </th>
+                    <th className="text-left py-2 text-muted-foreground font-medium">
+                      Sales Count
+                    </th>
+                    <th className="text-left py-2 text-muted-foreground font-medium">
+                      Total Revenue
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {stationStats.map((stat) => (
+                    <tr
+                      key={stat.barStationId}
+                      className="border-b border-border last:border-0"
+                    >
+                      <td className="py-3">
+                        <div className="font-medium text-card-foreground">
                           {stat.barStationName ||
-                            (stat.barStationId
-                              ? `Station ${stat.barStationId}`
-                              : "N/A")}
-                        </td>
-                        <td className="py-3 text-card-foreground font-medium">
-                          {stat.salesCount}
-                        </td>
-                        <td className="py-3 text-card-foreground font-medium">
-                          €{stat.totalRevenue.toFixed(2)}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                            `Station ${stat.barStationId}`}
+                        </div>
+                      </td>
+                      <td className="py-3 text-card-foreground font-medium">
+                        {stat.salesCount}
+                      </td>
+                      <td className="py-3 text-card-foreground font-medium">
+                        €{stat.totalRevenue.toFixed(2)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
-          )}
+          </div>
+        )}
+
+        {salesStats.length > 0 && (
+          <div className="rounded-lg bg-card p-6 px-0 shadow mb-6">
+            <h2 className="text-xl font-semibold text-card-foreground mb-4">
+              Sales Performance by User
+            </h2>
+            {/* Mobile card view */}
+            <div className="block sm:hidden space-y-2">
+              {salesStats.map((stat, index) => (
+                <div
+                  key={`${stat.userId}-${stat.barStationId || "null"}-${index}`}
+                  className="p-3 bg-gray-800 rounded-lg"
+                >
+                  <div className="flex items-start justify-between mb-2">
+                    <div>
+                      <div className="font-medium text-card-foreground">
+                        {stat.userName || "Unknown User"}
+                      </div>
+                      <div className="text-xs text-muted-foreground">
+                        {stat.userEmail}
+                      </div>
+                    </div>
+                    <span className="text-xs bg-gray-700 text-gray-300 px-2 py-0.5 rounded">
+                      {stat.barStationName ||
+                        (stat.barStationId
+                          ? `Station ${stat.barStationId}`
+                          : "N/A")}
+                    </span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">
+                      {stat.salesCount} sales
+                    </span>
+                    <span className="font-medium text-card-foreground">
+                      €{stat.totalRevenue.toFixed(2)}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+            {/* Desktop table view */}
+            <div className="hidden sm:block overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-border">
+                    <th className="text-left py-2 text-muted-foreground font-medium">
+                      User
+                    </th>
+                    <th className="text-left py-2 text-muted-foreground font-medium">
+                      Station
+                    </th>
+                    <th className="text-left py-2 text-muted-foreground font-medium">
+                      Sales Count
+                    </th>
+                    <th className="text-left py-2 text-muted-foreground font-medium">
+                      Total Revenue
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {salesStats.map((stat, index) => (
+                    <tr
+                      key={`${stat.userId}-${
+                        stat.barStationId || "null"
+                      }-${index}`}
+                      className="border-b border-border last:border-0"
+                    >
+                      <td className="py-3">
+                        <div>
+                          <div className="font-medium text-card-foreground">
+                            {stat.userName || "Unknown User"}
+                          </div>
+                          <div className="text-xs text-muted-foreground">
+                            {stat.userEmail}
+                          </div>
+                        </div>
+                      </td>
+                      <td className="py-3 text-card-foreground">
+                        {stat.barStationName ||
+                          (stat.barStationId
+                            ? `Station ${stat.barStationId}`
+                            : "N/A")}
+                      </td>
+                      <td className="py-3 text-card-foreground font-medium">
+                        {stat.salesCount}
+                      </td>
+                      <td className="py-3 text-card-foreground font-medium">
+                        €{stat.totalRevenue.toFixed(2)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
 
         {me.role === "ADMIN" && orgDetails && (
           <div>
