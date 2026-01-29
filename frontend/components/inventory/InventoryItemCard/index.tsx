@@ -2,17 +2,7 @@
 
 import { Edit, History, Minus, Plus, Trash } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
-interface InventoryItem {
-  id: number;
-  productId: number;
-  productName: string;
-  basePrice: string;
-  minPrice: string;
-  maxPrice: string;
-  quantity: string;
-  updatedAt: string;
-}
+import { InventoryItem } from "@/lib/inventory/types";
 
 interface InventoryItemCardProps {
   item: InventoryItem;
@@ -37,12 +27,12 @@ export function InventoryItemCard({
     <div className="rounded-lg bg-gray-800 border border-gray-700 p-4">
       {/* Header: Name and Status */}
       <div className="flex items-start justify-between mb-3">
-        <div>
-          <h3 className="font-medium text-gray-200">{item.productName}</h3>
+        <div className="min-w-0 flex-1 mr-2">
+          <h3 className="font-medium text-gray-200 truncate">{item.productName}</h3>
           <p className="text-xs text-gray-500">ID: {item.productId}</p>
         </div>
         <span
-          className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${status.bg} ${status.color}`}
+          className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium flex-shrink-0 ${status.bg} ${status.color}`}
         >
           {status.label}
         </span>
@@ -51,7 +41,7 @@ export function InventoryItemCard({
       {/* Price and Quantity Info */}
       <div className="grid grid-cols-2 gap-2 mb-3 text-sm">
         <div>
-          <span className="text-gray-500">Current:</span>
+          <span className="text-gray-500">Price:</span>
           <span className="ml-1 font-semibold text-gray-300">
             {parseFloat(item.basePrice).toFixed(2)}€
           </span>

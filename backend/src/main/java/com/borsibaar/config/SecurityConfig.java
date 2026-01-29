@@ -74,6 +74,12 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/organizations/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/organizations").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/api/organizations/**").hasRole("ADMIN")
+                        // Public OpenAPI docs
+                        .requestMatchers(
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html"
+                        ).permitAll()
                         // Need to make these public for client page
                         // TODO: these should not be fully public
                         .requestMatchers(HttpMethod.GET, "/api/categories/**").permitAll()

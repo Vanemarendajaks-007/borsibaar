@@ -1,25 +1,6 @@
-export interface CurrentUser {
-  id: number | string;
-  email: string;
-  name?: string;
-  organizationId?: number;
-  needsOnboarding: boolean;
-  role?: string;
-}
+import type { components } from "@/generated/api"
 
-export interface BarStation {
-  id: number;
-  organizationId: number;
-  name: string;
-  description?: string;
-  isActive: boolean;
-  assignedUsers?: User[];
-}
-
-export interface User {
-  id: string;
-  email: string;
-  name: string;
-  role: string;
-}
+export type CurrentUser = components["schemas"]["CurrentUser"] & { id: string | number }
+export type BarStation = components["schemas"]["BarStationResponseDto"];
+export type User = components["schemas"]["UserSummaryResponseDto"];
 

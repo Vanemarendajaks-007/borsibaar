@@ -8,7 +8,7 @@ import clsx from "clsx";
 import { POSHeader } from "./POSHeader";
 import { ProductCard } from "./ProductCard";
 import { CartSidebar } from "./CartSidebar";
-import { Product, Category, CartItem, CurrentUser, BarStation } from "./types";
+import { Product, Category, CartItem, CurrentUser, BarStation, SaleRequest } from "./types";
 
 export const dynamic = "force-dynamic";
 
@@ -186,7 +186,7 @@ export default function POSStation() {
 
     setIsProcessingSale(true);
     try {
-      const saleRequest = {
+      const saleRequest: SaleRequest = {
         items: cart.map((item) => ({
           productId: item.productId,
           quantity: item.quantity,
