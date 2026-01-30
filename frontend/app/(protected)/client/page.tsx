@@ -156,10 +156,10 @@ export default function ClientProductsByCategory() {
                     <table className="w-full text-xs lg:text-sm border-separate border-spacing-y-1 break-before-avoid">
                       <thead className="break-after-avoid">
                         <tr className="text-[8px] sm:text-[9px] lg:text-[10px] xl:text-[12px] uppercase tracking-[0.16em] text-[#7a7690]">
-                          <th className="px-2 py-1 text-left">Product</th>
-                          <th className="px-2 py-1 text-right">Price</th>
-                          <th className="px-2 py-1 text-right">Δ%</th>
-                          <th className="px-2 py-1 text-right">Base</th>
+                          <th className="px-1 sm:px-2 py-1 text-left">Product</th>
+                          <th className="px-1 sm:px-2 py-1 text-right">Price</th>
+                          <th className="px-1 sm:px-2 py-1 text-right hidden min-[400px]:table-cell">Δ%</th>
+                          <th className="px-1 sm:px-2 py-1 text-right hidden sm:table-cell">Base</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -183,18 +183,18 @@ export default function ClientProductsByCategory() {
                                 key={p.productId}
                                 className="bg-[#251f3a] hover:bg-[#2b2446] transition-colors break-inside-avoid"
                               >
-                                <td className="px-2 py-1">
+                                <td className="px-1 sm:px-2 py-1">
                                   <span className="font-medium truncate block text-sm sm:text-base">
                                     {p.productName}
                                   </span>
-                                  <p>{p.description}</p>
+                                  <p className="hidden min-[400px]:block">{p.description}</p>
                                 </td>
-                                <td className="px-2 py-1 text-right tabular-nums">
+                                <td className="px-1 sm:px-2 py-1 text-right tabular-nums">
                                   {money(p.unitPrice)}
                                 </td>
                                 <td
                                   className={clsx(
-                                    "px-2 py-1 text-right tabular-nums font-semibold whitespace-nowrap",
+                                    "px-1 sm:px-2 py-1 text-right tabular-nums font-semibold whitespace-nowrap hidden min-[400px]:table-cell",
                                     isUp && "text-emerald-400",
                                     isDown && "text-red-400",
                                     !isUp &&
@@ -211,7 +211,7 @@ export default function ClientProductsByCategory() {
                                     </>
                                   )}
                                 </td>
-                                <td className="px-2 py-1 text-right tabular-nums text-[#c2bedc]">
+                                <td className="px-1 sm:px-2 py-1 text-right tabular-nums text-[#c2bedc] hidden sm:table-cell">
                                   {money(p.basePrice)}
                                 </td>
                               </tr>
