@@ -133,6 +133,8 @@ jobs:
               cp .env.production .env
             fi
 
+            echo "$GHCR_TOKEN" | sudo docker login ghcr.io -u "$GHCR_USERNAME" --password-stdin
+
             # Stop existing containers, pull latest images from ghcr.io and restart
             docker compose -f "$DOCKER_COMPOSE_FILE" down
             docker compose -f "$DOCKER_COMPOSE_FILE" pull
