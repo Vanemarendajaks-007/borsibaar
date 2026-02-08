@@ -119,7 +119,7 @@ jobs:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          envs: DEPLOY_PATH,DOCKER_COMPOSE_FILE
+          envs: DEPLOY_PATH,DOCKER_COMPOSE_FILE,GHCR_USERNAME,GHCR_TOKEN
           script: |
             set -e
 
