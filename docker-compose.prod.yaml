@@ -16,9 +16,11 @@ services:
       - borsibaar-network
 
   backend:
-    build:
-      context: backend
-      dockerfile: Dockerfile
+    image: ghcr.io/vanemarendajaks-007/borsibaar-backend:latest
+    # To build locally instead of pulling from registry:
+    # build:
+    #   context: backend
+    #   dockerfile: Dockerfile
     container_name: borsibaar-backend
     expose:
       - "8080"
@@ -36,12 +38,13 @@ services:
       - borsibaar-network
 
   frontend:
-    build:
-      context: .
-      dockerfile: frontend/Dockerfile
-      args:
-        # Build-time variable for client-side OAuth redirects (now through nginx)
-        NEXT_PUBLIC_BACKEND_URL: ${NEXT_PUBLIC_BACKEND_URL}
+    image: ghcr.io/vanemarendajaks-007/borsibaar-frontend:latest
+    # To build locally instead of pulling from registry:
+    # build:
+    #   context: .
+    #   dockerfile: frontend/Dockerfile
+    #   args:
+    #     NEXT_PUBLIC_BACKEND_URL: ${NEXT_PUBLIC_BACKEND_URL}
     container_name: borsibaar-frontend
     expose:
       - "3000"
