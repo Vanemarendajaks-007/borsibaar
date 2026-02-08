@@ -11,6 +11,8 @@ env:
   FRONTEND_IMAGE: ghcr.io/vanemarendajaks-007/borsibaar-frontend
   DEPLOY_PATH: /opt/borsibaar
   DOCKER_COMPOSE_FILE: docker-compose.prod.yaml
+  GHCR_USERNAME: ${{ secrets.GHCR_USERNAME }}
+  GHCR_TOKEN: ${{ secrets.GHCR_TOKEN }}
 
 jobs:
   # Build Docker images and push to GitHub Container Registry
