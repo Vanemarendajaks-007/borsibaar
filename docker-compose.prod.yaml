@@ -24,6 +24,8 @@ services:
     container_name: borsibaar-backend
     expose:
       - "8080"
+    ports:
+      - "8080:8080"
     env_file:
       - .env
     environment:
@@ -48,6 +50,8 @@ services:
     container_name: borsibaar-frontend
     expose:
       - "3000"
+    ports:
+      - "3000:3000"
     environment:
       # Server-side: Use Docker network for internal communication
       BACKEND_URL: http://backend:8080
@@ -59,22 +63,23 @@ services:
     networks:
       - borsibaar-network
 
-  nginx:
-    image: nginx:alpine
-    container_name: borsibaar-nginx
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./nginx/conf.d:/etc/nginx/conf.d:ro
-      - ./nginx/ssl:/etc/nginx/ssl:ro
-    depends_on:
-      - frontend
-      - backend
-    restart: unless-stopped
-    networks:
-      - borsibaar-network
+#  We already have configured nginx on server
+#  nginx:
+#    image: nginx:alpine
+#    container_name: borsibaar-nginx
+#    ports:
+#      - "80:80"
+#      - "443:443"
+#    volumes:
+#      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+#      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+#      - ./nginx/ssl:/etc/nginx/ssl:ro
+#    depends_on:
+#      - frontend
+#      - backend
+#    restart: unless-stopped
+#    networks:
+#      - borsibaar-network
 
 volumes:
   postgres_data:
