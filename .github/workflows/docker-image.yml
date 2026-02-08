@@ -11,6 +11,8 @@ env:
   FRONTEND_IMAGE: ghcr.io/vanemarendajaks-007/borsibaar-frontend
   DEPLOY_PATH: /opt/borsibaar
   DOCKER_COMPOSE_FILE: docker-compose.prod.yaml
+  GHCR_USERNAME: ${{ secrets.GHCR_USERNAME }}
+  GHCR_TOKEN: ${{ secrets.GHCR_TOKEN }}
 
 jobs:
   # Build Docker images and push to GitHub Container Registry
@@ -132,6 +134,8 @@ jobs:
             if [ -f .env.production ]; then
               cp .env.production .env
             fi
+
+            echo "$GHCR_TOKEN" | sudo docker login ghcr.io -u "$GHCR_USERNAME" --password-stdin
 
             # Stop existing containers, pull latest images from ghcr.io and restart
             docker compose -f "$DOCKER_COMPOSE_FILE" down
