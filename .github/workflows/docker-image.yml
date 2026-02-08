@@ -120,6 +120,7 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           envs: DEPLOY_PATH,DOCKER_COMPOSE_FILE,GHCR_USERNAME,GHCR_TOKEN
+          timeout: 30m
           script: |
             set -e
 
